@@ -1,6 +1,7 @@
 # Publicação Vercel
 
 Projeto: https://vercel.com/tempests-projects-77349f79/clyvovet
+Aplicação pública: https://clyvovet.vercel.app
 Variáveis: https://vercel.com/tempests-projects-77349f79/clyvovet/settings/environment-variables
 Repositório: EduMollo/Projeto-EcoCreate-Java-Challenge-Sprint-2026-parte-4; branch de produção main.
 Runtime: Container, Dockerfile na raiz, porta 8080, região iad1 (mesma região do banco informado).
@@ -28,4 +29,4 @@ As variáveis de Production não são copiadas para Preview. Previews não devem
 4. Acompanhar build, conferir migrations e login HTTPS.
 5. Validar CRUD e persistência usando dados fictícios, depois atualizar o README com o endereço público real.
 
-Nenhum deploy executado até o registro destas instruções; senha e testes completos desta adaptação ainda pendentes.
+Publicação de produção concluída em 01/11/2026 para o commit adbaed18174ae957ec51c7dc4253c743c7634893, com status READY. Build Docker aprovado: 33 testes identificados, 29 aprovados, 4 opcionais ignorados, zero falhas/erros. A página de login foi aberta sem autenticação Vercel no domínio público; a autenticação da aplicação continua obrigatória. Logs de inicialização confirmam conexão com Supabase PostgreSQL 17.11 e schema na versão 6. A inspeção após a abertura não encontrou erros de runtime. Login autenticado, CRUD e compartilhamento de sessão entre instâncias ainda precisam de validação no ambiente publicado.

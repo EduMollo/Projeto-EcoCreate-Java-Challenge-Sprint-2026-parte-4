@@ -13,7 +13,7 @@ Controllers → services → repositories → banco. As views Thymeleaf recebem 
 - Relatórios administrativos chamando procedures empacotadas via JDBC.
 - Exportação JSON de atendimentos, faturamento por ano e auditoria de pets.
 - Seis cenários de navegador e novos testes de acesso aos relatórios.
-- Dockerfile para futura publicação. DevOps da equipe usa .NET e não é implementado neste repositório.
+- Publicação na Vercel com Docker, Supabase e sessões compartilhadas no PostgreSQL. DevOps da equipe usa .NET e não é implementado neste repositório.
 
 ## Executar a demonstração local
 
@@ -65,36 +65,38 @@ Os scripts de verificação e índices MongoDB estão em sql/. Não existe datas
 
 ## Publicação
 
-A disciplina exige acesso online. A publicação real ainda está pendente. O Dockerfile executa agora com SPRING_PROFILES_ACTIVE=postgres. Para Oracle, substituir essa variável por oracle. Configurar DB_URL, DB_USERNAME, DB_PASSWORD, ADMIN_PASSWORD e PORT=8080 na plataforma escolhida; usar HTTPS e COOKIE_SECURE=true.
+A aplicação está publicada em **https://clyvovet.vercel.app**. O frontend Thymeleaf e o backend Spring Boot executam juntos no Container Runtime da Vercel, com banco Supabase PostgreSQL e HTTPS. A branch de produção é `main`.
 
-Vercel oferece Container Runtime: https://vercel.com/docs/functions/runtimes/container . Avaliar a sessão HTTP no ambiente com múltiplas instâncias: as sessões atuais ficam em memória e podem exigir armazenamento compartilhado antes de publicar nesse cenário.
+Na Vercel, usar `SPRING_PROFILES_ACTIVE=postgres,vercel`, `PORT=8080` e `COOKIE_SECURE=true`. O perfil `vercel` habilita Spring Session JDBC: as sessões ficam nas tabelas privadas criadas pela migration V6, com cookies HttpOnly, Secure e SameSite=Lax. Configurar `DB_URL`, `DB_USERNAME` e `DB_PASSWORD` protegida; o administrador existente é reutilizado. `ADMIN_PASSWORD` só é necessária para inicializar uma base sem administrador. Guia: [DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md).
 
 Supabase é PostgreSQL: o perfil postgres já está preparado com funções alternativas de relatórios e auditoria, sem executar PL/SQL. Ver [SUPABASE.md](docs/SUPABASE.md) para criar o projeto e configurar Session pooler/JDBC. As tabelas ficam no schema privado clyvovet; a autenticação continua no Spring Security. Essa publicação não substitui a integração com a base Oracle exigida por Database.
 
 ## Validação
 
 - Build completo via clean verify concluído com BUILD SUCCESS; JAR executável clyvovet-web-4.0.0.jar gerado.
-- Relatórios Surefire: 32 testes identificados, 28 executados com sucesso, zero falhas/erros e 4 ignorados. Os ignorados são os testes opcionais OracleIntegracaoTest e PostgresIntegracaoTest, dependentes de configuração externa.
+- Build Docker na Vercel em 01/11/2026: 33 testes identificados, 29 executados com sucesso, zero falhas/erros e 4 ignorados. Inclui o teste de serialização do usuário autenticado. Os ignorados são os testes opcionais OracleIntegracaoTest e PostgresIntegracaoTest, dependentes de configuração externa.
 - Quatro testes Node do seletor de tema aprovados.
 - A aplicação foi iniciada pelo usuário com Supabase e o acesso à interface foi confirmado. A migration 5 teve um timeout ao alterar a tabela interna do Flyway; o SQL foi corrigido para restringir RLS e permissões às tabelas da aplicação.
 - Prévia visual do painel conferida nos dois temas e em largura de celular; login desktop também revisado.
-- Ainda pendentes: execução dos seis cenários Playwright, teste automatizado PostgreSQL, evidências de persistência/relatórios no banco real, publicação e gravação dos vídeos. O build padrão usa H2 para os testes de integração e não comprova esses itens externos.
+- Publicação de produção concluída; página de login HTTPS conferida no navegador. Logs confirmam conexão PostgreSQL 17.11, schema `clyvovet` na versão 6 e inicialização do servidor. A consulta aos logs após a abertura não encontrou erros de runtime.
+- Ainda pendentes: login autenticado e CRUD na aplicação publicada, execução dos seis cenários Playwright, teste automatizado PostgreSQL, evidências de persistência/relatórios no banco real e gravação dos vídeos. O build padrão usa H2 para os testes de integração e não comprova esses itens externos.
 
 ## Documentação e entrega
 
 - [Publicação com Supabase](docs/SUPABASE.md)
+- [Publicação na Vercel](docs/DEPLOY-VERCEL.md)
 - [Decisões e justificativas](docs/DECISOES-SPRINT4.md)
 - [Plano QA e evidências](docs/QA.md)
 - [Roteiro de apresentação até 15 minutos](docs/ROTEIRO-SPRINT4.md)
 - [README anterior e descrição detalhada dos fluxos](docs/README-SPRINT3.md)
 - Diagramas da Sprint 3: docs/der.drawio e docs/diagrama-classes.drawio (históricos, ainda não atualizados com os objetos Oracle da Sprint 4).
 
-Antes da entrega: executar todas as verificações pendentes, inserir o endereço online e o link real do vídeo abaixo. Não entregar estes campos em aberto.
+Antes da entrega: executar todas as verificações pendentes e inserir o link real do vídeo abaixo. Não entregar estes campos em aberto.
 
 | Entregável | Situação |
 |---|---|
 | Novo repositório GitHub | https://github.com/EduMollo/Projeto-EcoCreate-Java-Challenge-Sprint-2026-parte-4 |
-| Aplicação online | Publicação pendente |
+| Aplicação online | https://clyvovet.vercel.app |
 | Vídeo Java (até 15 minutos) | Gravação e link pendentes |
 | Evidências QA e Azure Boards | Execução, gravação e acesso do professor pendentes |
 
