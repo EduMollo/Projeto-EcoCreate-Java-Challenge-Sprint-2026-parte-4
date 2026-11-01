@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title>Agenda — ClyvoVet</title>
+</head>
+<body>
+<section>
+<div class="welcome-panel"><div><span class="eyebrow">Sua agenda</span><h1>Olá, <span th:text="${usuarioLogado.nomeExibicao}">Administrador</span><span style="color:var(--clyvo-primary)">.</span></h1><p>Uma visão do dia para dedicar mais atenção a quem precisa de cuidado.</p></div><div class="welcome-actions"><span class="date-chip"><i class="bi bi-calendar3" aria-hidden="true"></i><span th:text="${#temporals.format(#temporals.createToday(), 'dd/MM/yyyy')}">Hoje</span></span><a th:href="@{/consultas/nova}" class="btn btn-primary"><i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Agendar consulta</a></div></div>
+
+	<h2 class="panel-section-title">Acompanhamento do dia</h2>
+<div th:replace="~{consulta/fragmentos :: agenda(${agendaDoDia}, ${naoRealizadas})}"></div>
+</section>
+</body>
+</html>

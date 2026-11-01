@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title th:text="${petForm.id == null} ? 'Novo pet — ClyvoVet' : 'Editar pet — ClyvoVet'">Pet — ClyvoVet</title>
+</head>
+<body>
+<section>
+	<h1 class="h3 mb-3" th:text="${petForm.id == null} ? 'Novo pet' : 'Editar pet'">Pet</h1>
+
+	<div class="card shadow-sm">
+		<div class="card-body">
+			<form th:object="${petForm}"
+				th:action="${petForm.id == null} ? @{/pets} : @{/pets/{id}(id=${petForm.id})}" method="post">
+				<input type="hidden" th:field="*{id}">
+
+				<div class="row g-3">
+					<div class="col-md-6">
+						<label for="nome" class="form-label">Nome</label>
+						<input type="text" class="form-control" id="nome" th:field="*{nome}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{nome}"></div>
+					</div>
+					<div class="col-md-3">
+						<label for="especie" class="form-label">Espécie</label>
+						<select class="form-select" id="especie" th:field="*{especie}" th:errorclass="is-invalid">
+							<option value="">Selecione…</option>
+							<option th:each="especie : ${especies}" th:value="${especie}" th:text="${especie.descricao}">Espécie</option>
+						</select>
+						<div class="invalid-feedback" th:errors="*{especie}"></div>
+					</div>
+					<div class="col-md-3">
+						<label for="raca" class="form-label">Raça</label>
+						<input type="text" class="form-control" id="raca" th:field="*{raca}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{raca}"></div>
+					</div>
+
+					<div class="col-md-3">
+						<label for="dataNascimento" class="form-label">Data de nascimento</label>
+						<input type="date" class="form-control" id="dataNascimento" th:field="*{dataNascimento}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{dataNascimento}"></div>
+					</div>
+					<div class="col-md-3">
+						<label for="pesoKg" class="form-label">Peso (kg)</label>
+						<input type="number" step="0.01" min="0" class="form-control" id="pesoKg" th:field="*{pesoKg}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{pesoKg}"></div>
+					</div>
+					<div class="col-md-3">
+						<label for="sexo" class="form-label">Sexo</label>
+						<select class="form-select" id="sexo" th:field="*{sexo}">
+							<option value="">Não informado</option>
+							<option th:each="sexo : ${sexos}" th:value="${sexo}" th:text="${sexo.descricao}">Sexo</option>
+						</select>
+					</div>
+					<div class="col-md-3">
+						<label for="castrado" class="form-label">Castrado</label>
+						<select class="form-select" id="castrado" th:field="*{castrado}">
+							<option value="">Não informado</option>
+							<option value="true">Sim</option>
+							<option value="false">Não</option>
+						</select>
+					</div>
+
+					<div class="col-md-6">
+						<label for="idTutor" class="form-label">Tutor</label>
+						<select class="form-select" id="idTutor" th:field="*{idTutor}" th:errorclass="is-invalid">
+							<option value="">Selecione…</option>
+							<option th:each="tutor : ${tutores}" th:value="${tutor.id}" th:text="${tutor.nome + ' — CPF ' + tutor.cpf}">Tutor</option>
+						</select>
+						<div class="invalid-feedback" th:errors="*{idTutor}"></div>
+					</div>
+					<div class="col-md-6">
+						<label for="idClinicaPrincipal" class="form-label">Clínica principal</label>
+						<select class="form-select" id="idClinicaPrincipal" th:field="*{idClinicaPrincipal}">
+							<option value="">Nenhuma</option>
+							<option th:each="clinica : ${clinicas}" th:value="${clinica.id}" th:text="${clinica.nome}">Clínica</option>
+						</select>
+					</div>
+
+					<div class="col-md-4">
+						<label for="microchip" class="form-label">Microchip</label>
+						<input type="text" class="form-control" id="microchip" th:field="*{microchip}" th:errorclass="is-invalid" maxlength="20">
+						<div class="invalid-feedback" th:errors="*{microchip}"></div>
+					</div>
+					<div class="col-md-8">
+						<label for="observacoes" class="form-label">Observações</label>
+						<input type="text" class="form-control" id="observacoes" th:field="*{observacoes}" th:errorclass="is-invalid" maxlength="500">
+						<div class="invalid-feedback" th:errors="*{observacoes}"></div>
+					</div>
+				</div>
+
+				<div class="mt-4 d-flex gap-2">
+					<button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Salvar</button>
+					<a th:href="@{/pets}" class="btn btn-outline-secondary">Cancelar</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+</body>
+</html>

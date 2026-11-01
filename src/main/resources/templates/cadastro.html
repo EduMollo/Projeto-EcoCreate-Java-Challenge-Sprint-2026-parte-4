@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title>Criar conta — ClyvoVet</title>
+</head>
+<body>
+<section>
+	<div class="card shadow-sm mx-auto" style="max-width: 44rem;">
+		<div class="card-body p-4">
+			<div class="text-center mb-4">
+				<i class="bi bi-person-plus display-4 text-primary"></i>
+				<h1 class="h4 mt-2 mb-0">Criar conta de tutor</h1>
+				<p class="text-secondary small mb-0">Cadastre-se para acompanhar a saúde dos seus pets.</p>
+			</div>
+
+			<form th:object="${cadastroTutorForm}" th:action="@{/cadastro}" method="post">
+				<h2 class="h6 text-uppercase text-secondary mt-2 mb-3">Seus dados</h2>
+				<div class="row g-3">
+					<div class="col-md-8">
+						<label for="tutor.nome" class="form-label">Nome completo</label>
+						<input type="text" class="form-control" id="tutor.nome" th:field="*{tutor.nome}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{tutor.nome}"></div>
+					</div>
+					<div class="col-md-4">
+						<label for="tutor.cpf" class="form-label">CPF (somente números)</label>
+						<input type="text" class="form-control" id="tutor.cpf" th:field="*{tutor.cpf}" th:errorclass="is-invalid" maxlength="11">
+						<div class="invalid-feedback" th:errors="*{tutor.cpf}"></div>
+					</div>
+					<div class="col-md-6">
+						<label for="tutor.email" class="form-label">E-mail</label>
+						<input type="email" class="form-control" id="tutor.email" th:field="*{tutor.email}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{tutor.email}"></div>
+					</div>
+					<div class="col-md-3">
+						<label for="tutor.telefone" class="form-label">Telefone</label>
+						<input type="text" class="form-control" id="tutor.telefone" th:field="*{tutor.telefone}" th:errorclass="is-invalid" maxlength="11">
+						<div class="invalid-feedback" th:errors="*{tutor.telefone}"></div>
+					</div>
+					<div class="col-md-3">
+						<label for="tutor.dataNascimento" class="form-label">Nascimento</label>
+						<input type="date" class="form-control" id="tutor.dataNascimento" th:field="*{tutor.dataNascimento}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{tutor.dataNascimento}"></div>
+					</div>
+				</div>
+
+				<h2 class="h6 text-uppercase text-secondary mt-4 mb-3">Acesso</h2>
+				<div class="row g-3">
+					<div class="col-md-4">
+						<label for="conta.username" class="form-label">Nome de usuário</label>
+						<input type="text" class="form-control" id="conta.username" th:field="*{conta.username}" th:errorclass="is-invalid" autocomplete="username">
+						<div class="invalid-feedback" th:errors="*{conta.username}"></div>
+					</div>
+					<div class="col-md-4">
+						<label for="conta.senha" class="form-label">Senha</label>
+						<input type="password" class="form-control" id="conta.senha" th:field="*{conta.senha}" th:errorclass="is-invalid" autocomplete="new-password">
+						<div class="invalid-feedback" th:errors="*{conta.senha}"></div>
+					</div>
+					<div class="col-md-4">
+						<label for="conta.confirmacaoSenha" class="form-label">Confirmar senha</label>
+						<input type="password" class="form-control" id="conta.confirmacaoSenha" th:field="*{conta.confirmacaoSenha}"
+							th:classappend="${#fields.hasErrors('conta.confirmacaoSenha') or #fields.hasErrors('conta.senhasConferem')} ? 'is-invalid'"
+							autocomplete="new-password">
+						<div class="invalid-feedback" th:errors="*{conta.confirmacaoSenha}"></div>
+						<div class="invalid-feedback" th:errors="*{conta.senhasConferem}"></div>
+					</div>
+				</div>
+
+				<div class="mt-4 d-grid gap-2">
+					<button type="submit" class="btn btn-primary"><i class="bi bi-person-check me-1"></i>Criar conta</button>
+					<a th:href="@{/login}" class="btn btn-outline-secondary">Já tenho conta</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title>Pets — ClyvoVet</title>
+</head>
+<body>
+<section>
+	<div class="d-flex justify-content-between align-items-center mb-3">
+		<h1 class="h3 mb-0">Pets</h1>
+		<a th:href="@{/pets/novo}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Novo pet</a>
+	</div>
+
+	<div class="card shadow-sm">
+		<div class="table-responsive">
+			<table class="table table-hover align-middle mb-0">
+				<thead class="table-light">
+					<tr><th>Nome</th><th>Espécie / Raça</th><th>Idade</th><th>Tutor</th><th>Clínica principal</th><th class="text-end">Ações</th></tr>
+				</thead>
+				<tbody>
+					<tr th:if="${#lists.isEmpty(pets)}"><td colspan="6" class="text-secondary text-center py-4">Nenhum pet ativo.</td></tr>
+					<tr th:each="pet : ${pets}">
+						<td><a th:href="@{/pets/{id}(id=${pet.id})}" th:text="${pet.nome}" class="fw-semibold text-decoration-none">Nome</a></td>
+						<td th:text="${pet.especie.descricao + ' · ' + pet.raca}">Espécie</td>
+						<td th:text="${pet.idadeEmAnos + ' ano(s)'}">Idade</td>
+						<td th:text="${pet.tutor.nome}">Tutor</td>
+						<td th:text="${pet.clinicaPrincipal != null} ? ${pet.clinicaPrincipal.nome} : '—'">Clínica</td>
+						<td class="text-end acoes-tabela">
+							<a th:href="@{/pets/{id}/dashboard(id=${pet.id})}" class="btn btn-sm btn-outline-success">
+								<i class="bi bi-activity"></i> Saúde
+							</a>
+							<a th:href="@{/pets/{id}/editar(id=${pet.id})}" class="btn btn-sm btn-outline-primary">
+								<i class="bi bi-pencil"></i> Editar
+							</a>
+							<form th:action="@{/pets/{id}/alternar-ativo(id=${pet.id})}" method="post">
+								<button type="submit" class="btn btn-sm btn-outline-secondary">Inativar</button>
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</section>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title th:text="'Linha do tempo de ' + ${pet.nome} + ' — ClyvoVet'">Linha do tempo — ClyvoVet</title>
+</head>
+<body>
+<section>
+	<div class="d-flex justify-content-between align-items-center mb-3">
+		<h1 class="h3 mb-0">Linha do tempo — <span th:text="${pet.nome}">Pet</span></h1>
+		<div class="d-flex gap-2">
+			<a th:href="@{/pets/{id}(id=${pet.id})}" class="btn btn-outline-secondary"><i class="bi bi-card-list me-1"></i>Ficha</a>
+			<a th:href="@{/pets/{id}/dashboard(id=${pet.id})}" class="btn btn-success"><i class="bi bi-activity me-1"></i>Dashboard</a>
+		</div>
+	</div>
+
+	<div class="card shadow-sm">
+		<div class="card-body">
+			<p class="text-secondary mb-0" th:if="${#lists.isEmpty(eventos)}">Nenhum evento registrado para este pet.</p>
+			<ul class="linha-do-tempo mb-0" th:unless="${#lists.isEmpty(eventos)}">
+				<li th:each="evento : ${eventos}">
+					<div class="d-flex justify-content-between">
+						<span class="small text-secondary" th:text="${#temporals.format(evento.dataEvento, 'dd/MM/yyyy')}">Data</span>
+						<span class="badge bg-light text-dark" th:text="${evento.tipoEvento.descricao}">Tipo</span>
+					</div>
+					<div th:text="${evento.descricao}">Descrição</div>
+					<div class="small" th:if="${evento.dataProximaAcao != null}"
+						th:classappend="${evento.isPendente(#temporals.createToday())} ? 'text-danger' : 'text-secondary'">
+						<i class="bi bi-arrow-return-right me-1"></i>Próxima ação:
+						<span th:text="${#temporals.format(evento.dataProximaAcao, 'dd/MM/yyyy')}">Data</span>
+						<span th:if="${evento.isPendente(#temporals.createToday())}">(pendente)</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</section>
+</body>
+</html>

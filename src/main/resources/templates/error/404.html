@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title>Página não encontrada — ClyvoVet</title>
+</head>
+<body>
+<section class="text-center py-5">
+	<i class="bi bi-search display-1 text-secondary"></i>
+	<h1 class="h3 mt-3">Página não encontrada</h1>
+	<p class="text-secondary" th:text="${mensagem} ?: 'O endereço acessado não existe ou o registro foi removido.'">Mensagem</p>
+	<a th:href="@{/}" class="btn btn-primary"><i class="bi bi-house me-1"></i>Voltar ao início</a>
+</section>
+</body>
+</html>

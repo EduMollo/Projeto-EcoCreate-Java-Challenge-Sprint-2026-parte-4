@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title>Registrar vacina — ClyvoVet</title>
+</head>
+<body>
+<section>
+	<h1 class="h3 mb-1">Registrar vacina</h1>
+	<p class="text-secondary">
+		Consulta #<span th:text="${consulta.id}">0</span> · <strong th:text="${consulta.pet.nome}">Pet</strong> ·
+		<span th:text="${#temporals.format(consulta.dataConsulta, 'dd/MM/yyyy')}">Data</span>
+	</p>
+
+	<div class="card shadow-sm">
+		<div class="card-body">
+			<form th:object="${vacinaForm}" th:action="@{/consultas/{id}/vacinas(id=${consulta.id})}" method="post">
+				<div class="row g-3">
+					<div class="col-md-5">
+						<label for="nome" class="form-label">Vacina</label>
+						<input type="text" class="form-control" id="nome" th:field="*{nome}" th:errorclass="is-invalid" placeholder="ex.: V10, Antirrábica">
+						<div class="invalid-feedback" th:errors="*{nome}"></div>
+					</div>
+					<div class="col-md-4">
+						<label for="fabricante" class="form-label">Fabricante</label>
+						<input type="text" class="form-control" id="fabricante" th:field="*{fabricante}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{fabricante}"></div>
+					</div>
+					<div class="col-md-3">
+						<label for="lote" class="form-label">Lote</label>
+						<input type="text" class="form-control" id="lote" th:field="*{lote}" th:errorclass="is-invalid" maxlength="50">
+						<div class="invalid-feedback" th:errors="*{lote}"></div>
+					</div>
+					<div class="col-md-4">
+						<label for="dataAplicacao" class="form-label">Data de aplicação</label>
+						<input type="date" class="form-control" id="dataAplicacao" th:field="*{dataAplicacao}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{dataAplicacao}"></div>
+					</div>
+					<div class="col-md-4">
+						<label for="dataValidade" class="form-label">Validade</label>
+						<input type="date" class="form-control" id="dataValidade" th:field="*{dataValidade}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{dataValidade}"></div>
+						<div class="invalid-feedback d-block" th:if="${#fields.hasErrors('validadePosteriorAplicacao')}" th:errors="*{validadePosteriorAplicacao}"></div>
+					</div>
+					<div class="col-md-4">
+						<label for="proximaDose" class="form-label">Próxima dose (opcional)</label>
+						<input type="date" class="form-control" id="proximaDose" th:field="*{proximaDose}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{proximaDose}"></div>
+					</div>
+				</div>
+
+				<div class="mt-4 d-flex gap-2">
+					<button type="submit" class="btn btn-primary"><i class="bi bi-shield-plus me-1"></i>Registrar</button>
+					<a th:href="@{/consultas/{id}(id=${consulta.id})}" class="btn btn-outline-secondary">Voltar</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+</body>
+</html>

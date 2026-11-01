@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title th:text="'Consulta #' + ${consulta.id} + ' — ClyvoVet'">Consulta — ClyvoVet</title>
+</head>
+<body>
+<section>
+	<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+		<div>
+			<h1 class="h3 mb-0">
+				Consulta #<span th:text="${consulta.id}">0</span>
+				<span th:replace="~{consulta/fragmentos :: status(${consulta.status})}"></span>
+			</h1>
+			<span class="text-secondary">
+				<span th:text="${consulta.tipoConsulta.descricao}">Tipo</span> ·
+				<span th:text="${#temporals.format(consulta.dataConsulta, 'dd/MM/yyyy')}">Data</span> ·
+				<span th:text="${consulta.clinica.nome}">Clínica</span>
+			</span>
+		</div>
+		<a th:href="@{/consultas}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Consultas</a>
+	</div>
+
+	<!-- Passo a passo da jornada -->
+	<div class="card shadow-sm mb-3">
+		<div class="card-body d-flex flex-wrap gap-2 align-items-center">
+			<span class="text-secondary me-2">Jornada:</span>
+			<span class="badge rounded-pill" th:classappend="${consulta.agendada} ? 'bg-primary' : 'bg-light text-dark'">1. Agendada</span>
+			<i class="bi bi-arrow-right text-secondary"></i>
+			<span class="badge rounded-pill" th:classappend="${consulta.emAndamento} ? 'bg-warning text-dark' : 'bg-light text-dark'">2. Em andamento</span>
+			<i class="bi bi-arrow-right text-secondary"></i>
+			<span class="badge rounded-pill" th:classappend="${consulta.concluida} ? 'bg-success' : 'bg-light text-dark'">3. Concluída</span>
+			<span class="badge rounded-pill ms-3" th:if="${consulta.status.name() == 'CANCELADA'}">Cancelada</span>
+
+			<div class="ms-auto d-flex gap-2">
+				<form th:if="${consulta.agendada}" th:action="@{/consultas/{id}/iniciar(id=${consulta.id})}" method="post">
+					<button type="submit" class="btn btn-warning"><i class="bi bi-play-fill me-1"></i>Iniciar atendimento</button>
+				</form>
+				<a th:if="${consulta.emAndamento}" th:href="@{/consultas/{id}/atender(id=${consulta.id})}" class="btn btn-success">
+					<i class="bi bi-clipboard2-pulse me-1"></i>Registrar atendimento
+				</a>
+				<button th:if="${consulta.cancelavel}" type="button" class="btn btn-outline-danger"
+					data-bs-toggle="collapse" data-bs-target="#cancelamento">
+					<i class="bi bi-x-circle me-1"></i>Cancelar consulta
+				</button>
+			</div>
+		</div>
+
+		<div class="collapse border-top" id="cancelamento" th:classappend="${#fields.hasErrors('cancelamentoForm.*')} ? 'show'"
+			th:if="${consulta.cancelavel}">
+			<form class="card-body" th:object="${cancelamentoForm}" th:action="@{/consultas/{id}/cancelar(id=${consulta.id})}" method="post">
+				<label for="motivo" class="form-label">Motivo do cancelamento</label>
+				<div class="input-group">
+					<input type="text" class="form-control" id="motivo" th:field="*{motivo}" th:errorclass="is-invalid" maxlength="300">
+					<button type="submit" class="btn btn-danger">Confirmar cancelamento</button>
+					<div class="invalid-feedback" th:errors="*{motivo}"></div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="row g-3">
+		<div class="col-lg-5">
+			<div class="card shadow-sm h-100">
+				<div class="card-header bg-body"><strong>Dados da consulta</strong></div>
+				<dl class="row card-body mb-0">
+					<dt class="col-5">Pet</dt>
+					<dd class="col-7"><a th:href="@{/pets/{id}(id=${consulta.pet.id})}" th:text="${consulta.pet.nome}" class="text-decoration-none">Pet</a></dd>
+					<dt class="col-5">Tutor</dt><dd class="col-7" th:text="${consulta.pet.tutor.nome}">Tutor</dd>
+					<dt class="col-5">Veterinário</dt><dd class="col-7" th:text="${consulta.veterinario}">Vet</dd>
+					<dt class="col-5">Observações</dt><dd class="col-7" th:text="${consulta.observacoes} ?: '—'">Obs</dd>
+					<dt class="col-5" th:if="${consulta.motivoCancelamento != null}">Motivo do cancelamento</dt>
+					<dd class="col-7 text-danger" th:if="${consulta.motivoCancelamento != null}" th:text="${consulta.motivoCancelamento}">Motivo</dd>
+					<dt class="col-5">Registrada em</dt><dd class="col-7" th:text="${#temporals.format(consulta.criadoEm, 'dd/MM/yyyy HH:mm')}">Data</dd>
+				</dl>
+			</div>
+		</div>
+
+		<div class="col-lg-7">
+			<div class="card shadow-sm h-100">
+				<div class="card-header bg-body d-flex justify-content-between align-items-center">
+					<strong><i class="bi bi-clipboard2-pulse me-1"></i>Atendimento</strong>
+					<div class="d-flex gap-2" th:if="${consulta.emAndamento or consulta.concluida}">
+						<a th:href="@{/consultas/{id}/medicamentos/novo(id=${consulta.id})}" class="btn btn-sm btn-outline-primary">
+							<i class="bi bi-capsule me-1"></i>Prescrever medicamento
+						</a>
+						<a th:href="@{/consultas/{id}/vacinas/nova(id=${consulta.id})}" class="btn btn-sm btn-outline-primary">
+							<i class="bi bi-shield-plus me-1"></i>Registrar vacina
+						</a>
+					</div>
+				</div>
+				<div class="card-body">
+					<p class="text-secondary mb-0" th:if="${!consulta.concluida}">
+						O diagnóstico, a prescrição e o retorno são registrados ao concluir o atendimento.
+					</p>
+					<dl class="row mb-0" th:if="${consulta.concluida}">
+						<dt class="col-4">Diagnóstico</dt><dd class="col-8" th:text="${consulta.diagnostico}">Diagnóstico</dd>
+						<dt class="col-4">Prescrição</dt><dd class="col-8" th:text="${consulta.prescricao} ?: '—'">Prescrição</dd>
+						<dt class="col-4">Valor</dt>
+						<dd class="col-8" th:text="${consulta.valor != null} ? 'R$ ' + ${#numbers.formatDecimal(consulta.valor, 1, 'POINT', 2, 'COMMA')} : '—'">Valor</dd>
+						<dt class="col-4">Retorno</dt>
+						<dd class="col-8" th:text="${consulta.dataRetorno != null} ? ${#temporals.format(consulta.dataRetorno, 'dd/MM/yyyy')} + ' (agendado automaticamente)' : 'Sem retorno previsto'">Retorno</dd>
+					</dl>
+
+					<hr>
+					<h2 class="h6"><i class="bi bi-capsule me-1"></i>Medicamentos prescritos nesta consulta</h2>
+					<p class="text-secondary small mb-0" th:if="${#lists.isEmpty(medicamentos)}">Nenhum medicamento prescrito.</p>
+					<ul class="list-unstyled mb-0" th:unless="${#lists.isEmpty(medicamentos)}">
+						<li th:each="medicamento : ${medicamentos}">
+							<strong th:text="${medicamento.nome}">Medicamento</strong>
+							<span class="text-secondary small" th:text="'— ' + ${medicamento.dosagem} + ', ' + ${medicamento.frequencia}">Posologia</span>
+							<span class="badge bg-info text-dark ms-1" th:if="${medicamento.usoContinuo}">Uso contínuo</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+</body>
+</html>

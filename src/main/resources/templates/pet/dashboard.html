@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title th:text="'Saúde de ' + ${dashboard.pet.nome} + ' — ClyvoVet'">Dashboard — ClyvoVet</title>
+</head>
+<body>
+<section>
+	<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+		<div>
+			<h1 class="h3 mb-0">Dashboard de saúde — <span th:text="${dashboard.pet.nome}">Pet</span></h1>
+			<span class="text-secondary" th:text="${dashboard.pet.especie.descricao + ' · ' + dashboard.pet.raca + ' · ' + dashboard.pet.idadeEmAnos + ' ano(s) · Tutor: ' + dashboard.pet.tutor.nome}">Resumo</span>
+		</div>
+		<div class="d-flex gap-2">
+			<a th:href="@{/pets/{id}(id=${dashboard.pet.id})}" class="btn btn-outline-secondary"><i class="bi bi-card-list me-1"></i>Ficha</a>
+			<a th:href="@{/pets/{id}/historico(id=${dashboard.pet.id})}" class="btn btn-outline-secondary"><i class="bi bi-clock-history me-1"></i>Linha do tempo</a>
+		</div>
+	</div>
+
+	<div class="row g-3 mb-3">
+		<div class="col-md-4">
+			<div class="card shadow-sm h-100">
+				<div class="card-body d-flex align-items-center gap-3">
+					<div class="score-risco" th:classappend="'bg-' + ${dashboard.risco.classificacao.corBootstrap}">
+						<span class="numero" th:text="${dashboard.risco.score}">0</span>
+						<small>/ 100</small>
+					</div>
+					<div>
+						<div class="text-secondary small">Score de risco</div>
+						<div class="h4 mb-1" th:text="'Risco ' + ${dashboard.risco.classificacao.descricao}">Risco</div>
+						<div class="small text-secondary" th:text="${#lists.size(dashboard.risco.alertas)} + ' alerta(s) ativo(s)'">Alertas</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="card card-indicador shadow-sm h-100">
+				<div class="card-body">
+					<div class="text-secondary small">Última consulta concluída</div>
+					<div class="h5 mb-1" th:text="${dashboard.ultimaConsulta != null} ? ${#temporals.format(dashboard.ultimaConsulta, 'dd/MM/yyyy')} : 'Nenhuma'">Data</div>
+					<div class="small text-secondary" th:if="${dashboard.diasDesdeUltimaConsulta != null}" th:text="'há ' + ${dashboard.diasDesdeUltimaConsulta} + ' dias'">Dias</div>
+					<div class="small text-secondary mt-2" th:text="${dashboard.totalConsultas} + ' consulta(s) no histórico'">Total</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="card card-indicador shadow-sm h-100">
+				<div class="card-body">
+					<div class="text-secondary small">Consultas agendadas</div>
+					<p class="text-secondary mb-0" th:if="${#lists.isEmpty(dashboard.proximasConsultas)}">Nenhuma agendada.</p>
+					<ul class="list-unstyled mb-0" th:unless="${#lists.isEmpty(dashboard.proximasConsultas)}">
+						<li th:each="consulta : ${dashboard.proximasConsultas}">
+							<i class="bi bi-calendar-event me-1"></i>
+							<span th:text="${#temporals.format(consulta.dataConsulta, 'dd/MM/yyyy')}">Data</span> ·
+							<span th:text="${consulta.tipoConsulta.descricao}">Tipo</span> ·
+							<span th:text="${consulta.clinica.nome}">Clínica</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="card shadow-sm mb-3">
+		<div class="card-header bg-body"><strong><i class="bi bi-bell me-1"></i>Alertas proativos</strong></div>
+		<div class="card-body p-0">
+			<p class="text-success p-3 mb-0" th:if="${#lists.isEmpty(dashboard.risco.alertas)}">
+				<i class="bi bi-check-circle me-1"></i>Nenhum alerta. Acompanhamento em dia.
+			</p>
+			<ul class="list-group list-group-flush" th:unless="${#lists.isEmpty(dashboard.risco.alertas)}">
+				<li class="list-group-item d-flex justify-content-between align-items-start gap-3" th:each="alerta : ${dashboard.risco.alertas}">
+					<div>
+						<span class="badge me-2" th:classappend="'bg-' + ${alerta.prioridade.corBootstrap}" th:text="${alerta.prioridade.descricao}">Prioridade</span>
+						<strong th:text="${alerta.titulo}">Título</strong>
+						<div class="text-secondary small" th:text="${alerta.descricao}">Descrição</div>
+					</div>
+					<div class="text-end text-nowrap small text-secondary">
+						<div>+<span th:text="${alerta.pontos}">0</span> pts</div>
+						<div>até <span th:text="${#temporals.format(alerta.dataLimite, 'dd/MM/yyyy')}">Data</span></div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row g-3">
+		<div class="col-lg-4">
+			<div class="card shadow-sm h-100">
+				<div class="card-header bg-body"><strong><i class="bi bi-shield-plus me-1"></i>Carteira de vacinação</strong></div>
+				<div class="card-body p-0">
+					<p class="text-secondary p-3 mb-0" th:if="${#lists.isEmpty(dashboard.vacinas)}">Nenhuma vacina registrada.</p>
+					<ul class="list-group list-group-flush" th:unless="${#lists.isEmpty(dashboard.vacinas)}">
+						<li class="list-group-item" th:each="vacina : ${dashboard.vacinas}">
+							<div class="d-flex justify-content-between">
+								<strong th:text="${vacina.nome}">Vacina</strong>
+								<span class="badge" th:classappend="${vacina.isVencida(#temporals.createToday())} ? 'bg-danger' : 'bg-success'"
+									th:text="${vacina.isVencida(#temporals.createToday())} ? 'Vencida' : 'Válida'">Situação</span>
+							</div>
+							<div class="small text-secondary">
+								<span th:text="${vacina.fabricante}">Fabricante</span> ·
+								aplicada em <span th:text="${#temporals.format(vacina.dataAplicacao, 'dd/MM/yyyy')}">Data</span> ·
+								validade <span th:text="${#temporals.format(vacina.dataValidade, 'dd/MM/yyyy')}">Data</span>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-lg-4">
+			<div class="card shadow-sm h-100">
+				<div class="card-header bg-body"><strong><i class="bi bi-capsule me-1"></i>Medicamentos ativos</strong></div>
+				<div class="card-body p-0">
+					<p class="text-secondary p-3 mb-0" th:if="${#lists.isEmpty(dashboard.medicamentosAtivos)}">Nenhum medicamento em uso.</p>
+					<ul class="list-group list-group-flush" th:unless="${#lists.isEmpty(dashboard.medicamentosAtivos)}">
+						<li class="list-group-item" th:each="medicamento : ${dashboard.medicamentosAtivos}">
+							<strong th:text="${medicamento.nome}">Medicamento</strong>
+							<span class="badge bg-info text-dark ms-1" th:if="${medicamento.usoContinuo}">Uso contínuo</span>
+							<div class="small text-secondary" th:text="${medicamento.dosagem + ' · ' + medicamento.frequencia}">Posologia</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-lg-4">
+			<div class="card shadow-sm h-100">
+				<div class="card-header bg-body"><strong><i class="bi bi-clock-history me-1"></i>Últimos eventos</strong></div>
+				<div class="card-body">
+					<p class="text-secondary mb-0" th:if="${#lists.isEmpty(dashboard.ultimosEventos)}">Linha do tempo vazia.</p>
+					<ul class="linha-do-tempo mb-0" th:unless="${#lists.isEmpty(dashboard.ultimosEventos)}">
+						<li th:each="evento : ${dashboard.ultimosEventos}">
+							<div class="small text-secondary" th:text="${#temporals.format(evento.dataEvento, 'dd/MM/yyyy') + ' · ' + evento.tipoEvento.descricao}">Data</div>
+							<div th:text="${evento.descricao}">Descrição</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+</body>
+</html>

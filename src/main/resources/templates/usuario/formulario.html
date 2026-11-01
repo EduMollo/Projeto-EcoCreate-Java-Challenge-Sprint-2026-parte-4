@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title>Novo usuário — ClyvoVet</title>
+</head>
+<body>
+<section>
+	<h1 class="h3 mb-3">Novo usuário</h1>
+
+	<div class="card shadow-sm">
+		<div class="card-body">
+			<form th:object="${usuarioForm}" th:action="@{/usuarios}" method="post">
+				<div class="row g-3">
+					<div class="col-md-4">
+						<label for="username" class="form-label">Nome de usuário (login)</label>
+						<input type="text" class="form-control" id="username" th:field="*{username}" th:errorclass="is-invalid" autocomplete="off">
+						<div class="invalid-feedback" th:errors="*{username}"></div>
+					</div>
+					<div class="col-md-4">
+						<label for="senha" class="form-label">Senha</label>
+						<input type="password" class="form-control" id="senha" th:field="*{senha}" th:errorclass="is-invalid" autocomplete="new-password">
+						<div class="invalid-feedback" th:errors="*{senha}"></div>
+					</div>
+					<div class="col-md-4">
+						<label for="confirmacaoSenha" class="form-label">Confirmar senha</label>
+						<input type="password" class="form-control" id="confirmacaoSenha" th:field="*{confirmacaoSenha}"
+							th:classappend="${#fields.hasErrors('confirmacaoSenha') or #fields.hasErrors('senhasConferem')} ? 'is-invalid'"
+							autocomplete="new-password">
+						<div class="invalid-feedback" th:errors="*{confirmacaoSenha}"></div>
+						<div class="invalid-feedback" th:errors="*{senhasConferem}"></div>
+					</div>
+					<div class="col-md-6">
+						<label for="nomeExibicao" class="form-label">Nome de exibição</label>
+						<input type="text" class="form-control" id="nomeExibicao" th:field="*{nomeExibicao}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{nomeExibicao}"></div>
+					</div>
+					<div class="col-md-6">
+						<label for="perfil" class="form-label">Perfil de acesso</label>
+						<select class="form-select" id="perfil" th:field="*{perfil}" th:errorclass="is-invalid">
+							<option value="">Selecione…</option>
+							<option th:each="perfil : ${perfis}" th:value="${perfil}" th:text="${perfil.descricao}">Perfil</option>
+						</select>
+						<div class="invalid-feedback" th:errors="*{perfil}"></div>
+					</div>
+					<div class="col-12">
+						<label for="idTutor" class="form-label">Tutor vinculado (obrigatório para o perfil Tutor)</label>
+						<select class="form-select" id="idTutor" th:field="*{idTutor}"
+							th:classappend="${#fields.hasErrors('tutorVinculadoQuandoNecessario')} ? 'is-invalid'">
+							<option value="">Nenhum</option>
+							<option th:each="tutor : ${tutores}" th:value="${tutor.id}" th:text="${tutor.nome + ' — CPF ' + tutor.cpf}">Tutor</option>
+						</select>
+						<div class="invalid-feedback" th:errors="*{tutorVinculadoQuandoNecessario}"></div>
+					</div>
+				</div>
+
+				<div class="mt-4 d-flex gap-2">
+					<button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Salvar</button>
+					<a th:href="@{/usuarios}" class="btn btn-outline-secondary">Cancelar</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+</body>
+</html>

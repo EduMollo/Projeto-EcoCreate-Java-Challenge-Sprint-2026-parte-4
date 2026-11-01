@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title>Erro — ClyvoVet</title>
+</head>
+<body>
+<section class="text-center py-5">
+	<i class="bi bi-bug display-1 text-warning"></i>
+	<h1 class="h3 mt-3">Algo deu errado</h1>
+	<p class="text-secondary">
+		Ocorreu um erro inesperado<span th:if="${status}"> (código <span th:text="${status}">500</span>)</span>.
+		Tente novamente ou volte ao início.
+	</p>
+	<a th:href="@{/}" class="btn btn-primary"><i class="bi bi-house me-1"></i>Voltar ao início</a>
+</section>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title>Prescrever medicamento — ClyvoVet</title>
+</head>
+<body>
+<section>
+	<h1 class="h3 mb-1">Prescrever medicamento</h1>
+	<p class="text-secondary">
+		Consulta #<span th:text="${consulta.id}">0</span> · <strong th:text="${consulta.pet.nome}">Pet</strong> ·
+		<span th:text="${#temporals.format(consulta.dataConsulta, 'dd/MM/yyyy')}">Data</span>
+	</p>
+
+	<div class="card shadow-sm">
+		<div class="card-body">
+			<form th:object="${medicamentoForm}" th:action="@{/consultas/{id}/medicamentos(id=${consulta.id})}" method="post">
+				<div class="row g-3">
+					<div class="col-md-6">
+						<label for="nome" class="form-label">Medicamento</label>
+						<input type="text" class="form-control" id="nome" th:field="*{nome}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{nome}"></div>
+					</div>
+					<div class="col-md-6">
+						<label for="principioAtivo" class="form-label">Princípio ativo</label>
+						<input type="text" class="form-control" id="principioAtivo" th:field="*{principioAtivo}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{principioAtivo}"></div>
+					</div>
+					<div class="col-md-4">
+						<label for="dosagem" class="form-label">Dosagem</label>
+						<input type="text" class="form-control" id="dosagem" th:field="*{dosagem}" th:errorclass="is-invalid" placeholder="ex.: 0,1 mg/kg">
+						<div class="invalid-feedback" th:errors="*{dosagem}"></div>
+					</div>
+					<div class="col-md-4">
+						<label for="frequencia" class="form-label">Frequência</label>
+						<input type="text" class="form-control" id="frequencia" th:field="*{frequencia}" th:errorclass="is-invalid" placeholder="ex.: 2x ao dia">
+						<div class="invalid-feedback" th:errors="*{frequencia}"></div>
+					</div>
+					<div class="col-md-4 d-flex align-items-end">
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="usoContinuo" th:field="*{usoContinuo}">
+							<label class="form-check-label" for="usoContinuo">Uso contínuo</label>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<label for="dataInicio" class="form-label">Início</label>
+						<input type="date" class="form-control" id="dataInicio" th:field="*{dataInicio}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{dataInicio}"></div>
+					</div>
+					<div class="col-md-3">
+						<label for="dataFim" class="form-label">Fim (opcional)</label>
+						<input type="date" class="form-control" id="dataFim" th:field="*{dataFim}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{dataFim}"></div>
+						<div class="invalid-feedback d-block" th:if="${#fields.hasErrors('periodoValido')}" th:errors="*{periodoValido}"></div>
+					</div>
+					<div class="col-md-6">
+						<label for="observacoes" class="form-label">Observações</label>
+						<input type="text" class="form-control" id="observacoes" th:field="*{observacoes}" th:errorclass="is-invalid" maxlength="500">
+						<div class="invalid-feedback" th:errors="*{observacoes}"></div>
+					</div>
+				</div>
+
+				<div class="mt-4 d-flex gap-2">
+					<button type="submit" class="btn btn-primary"><i class="bi bi-capsule me-1"></i>Prescrever</button>
+					<a th:href="@{/consultas/{id}(id=${consulta.id})}" class="btn btn-outline-secondary">Voltar</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+</body>
+</html>

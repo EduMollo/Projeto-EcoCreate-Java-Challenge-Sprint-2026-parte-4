@@ -1,0 +1,2 @@
+const { defineConfig } = require('@playwright/test');
+module.exports = defineConfig({testDir:'./tests',workers:1,retries:0,reporter:[['list'],['html',{open:'never'}],['junit',{outputFile:'test-results/results.xml'}]],use:{baseURL:process.env.BASE_URL||'http://localhost:8080',browserName:'chromium',viewport:{width:1440,height:900},trace:'retain-on-failure',screenshot:'only-on-failure',video:'on'}});

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title th:text="'Atender consulta #' + ${consulta.id} + ' — ClyvoVet'">Atender — ClyvoVet</title>
+</head>
+<body>
+<section>
+	<h1 class="h3 mb-1">Registrar atendimento — consulta #<span th:text="${consulta.id}">0</span></h1>
+	<p class="text-secondary">
+		<strong th:text="${consulta.pet.nome}">Pet</strong> ·
+		<span th:text="${consulta.tipoConsulta.descricao}">Tipo</span> ·
+		<span th:text="${#temporals.format(consulta.dataConsulta, 'dd/MM/yyyy')}">Data</span> ·
+		<span th:text="${consulta.veterinario}">Vet</span>
+	</p>
+
+	<div class="card shadow-sm">
+		<div class="card-body">
+			<form th:object="${atendimentoForm}" th:action="@{/consultas/{id}/concluir(id=${consulta.id})}" method="post">
+				<div class="row g-3">
+					<div class="col-12">
+						<label for="diagnostico" class="form-label">Diagnóstico</label>
+						<textarea class="form-control" id="diagnostico" rows="3" th:field="*{diagnostico}" th:errorclass="is-invalid" maxlength="1000"></textarea>
+						<div class="invalid-feedback" th:errors="*{diagnostico}"></div>
+					</div>
+					<div class="col-12">
+						<label for="prescricao" class="form-label">Prescrição / orientações</label>
+						<textarea class="form-control" id="prescricao" rows="3" th:field="*{prescricao}" th:errorclass="is-invalid" maxlength="1000"></textarea>
+						<div class="invalid-feedback" th:errors="*{prescricao}"></div>
+					</div>
+					<div class="col-md-6">
+						<label for="observacoes" class="form-label">Observações</label>
+						<input type="text" class="form-control" id="observacoes" th:field="*{observacoes}" th:errorclass="is-invalid" maxlength="500">
+						<div class="invalid-feedback" th:errors="*{observacoes}"></div>
+					</div>
+					<div class="col-md-3">
+						<label for="valor" class="form-label">Valor (R$)</label>
+						<input type="number" step="0.01" min="0" class="form-control" id="valor" th:field="*{valor}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{valor}"></div>
+					</div>
+					<div class="col-md-3">
+						<label for="dataRetorno" class="form-label">Data de retorno (opcional)</label>
+						<input type="date" class="form-control" id="dataRetorno" th:field="*{dataRetorno}" th:errorclass="is-invalid">
+						<div class="form-text">Se informada, um retorno é agendado automaticamente.</div>
+						<div class="invalid-feedback" th:errors="*{dataRetorno}"></div>
+					</div>
+				</div>
+
+				<div class="mt-4 d-flex gap-2">
+					<button type="submit" class="btn btn-success"><i class="bi bi-check2-circle me-1"></i>Concluir atendimento</button>
+					<a th:href="@{/consultas/{id}(id=${consulta.id})}" class="btn btn-outline-secondary">Voltar</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+</body>
+</html>

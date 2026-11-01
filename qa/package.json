@@ -1,0 +1,12 @@
+{
+  "name": "clyvovet-qa",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "headed": "playwright test --headed",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1"
+  }
+}

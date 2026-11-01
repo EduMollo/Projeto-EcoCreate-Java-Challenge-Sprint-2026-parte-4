@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title>Agendar consulta — ClyvoVet</title>
+</head>
+<body>
+<section>
+	<h1 class="h3 mb-3">Agendar consulta</h1>
+
+	<div class="card shadow-sm">
+		<div class="card-body">
+			<form th:object="${agendamentoForm}" th:action="@{/consultas}" method="post">
+				<div class="row g-3">
+					<div class="col-md-6">
+						<label for="idPet" class="form-label">Pet</label>
+						<select class="form-select" id="idPet" th:field="*{idPet}" th:errorclass="is-invalid">
+							<option value="">Selecione…</option>
+							<option th:each="pet : ${pets}" th:value="${pet.id}" th:text="${pet.nome + ' (' + pet.especie.descricao + ') — ' + pet.tutor.nome}">Pet</option>
+						</select>
+						<div class="invalid-feedback" th:errors="*{idPet}"></div>
+					</div>
+					<div class="col-md-6">
+						<label for="idClinica" class="form-label">Clínica</label>
+						<select class="form-select" id="idClinica" th:field="*{idClinica}" th:errorclass="is-invalid">
+							<option value="">Selecione…</option>
+							<option th:each="clinica : ${clinicas}" th:value="${clinica.id}" th:text="${clinica.nome}">Clínica</option>
+						</select>
+						<div class="invalid-feedback" th:errors="*{idClinica}"></div>
+					</div>
+					<div class="col-md-3">
+						<label for="dataConsulta" class="form-label">Data</label>
+						<input type="date" class="form-control" id="dataConsulta" th:field="*{dataConsulta}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{dataConsulta}"></div>
+					</div>
+					<div class="col-md-3">
+						<label for="tipoConsulta" class="form-label">Tipo</label>
+						<select class="form-select" id="tipoConsulta" th:field="*{tipoConsulta}" th:errorclass="is-invalid">
+							<option value="">Selecione…</option>
+							<option th:each="tipo : ${tipos}" th:value="${tipo}" th:text="${tipo.descricao}">Tipo</option>
+						</select>
+						<div class="invalid-feedback" th:errors="*{tipoConsulta}"></div>
+					</div>
+					<div class="col-md-6">
+						<label for="veterinario" class="form-label">Veterinário responsável</label>
+						<input type="text" class="form-control" id="veterinario" th:field="*{veterinario}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{veterinario}"></div>
+					</div>
+					<div class="col-12">
+						<label for="observacoes" class="form-label">Observações</label>
+						<textarea class="form-control" id="observacoes" rows="2" th:field="*{observacoes}" th:errorclass="is-invalid" maxlength="500"></textarea>
+						<div class="invalid-feedback" th:errors="*{observacoes}"></div>
+					</div>
+				</div>
+
+				<div class="mt-4 d-flex gap-2">
+					<button type="submit" class="btn btn-primary"><i class="bi bi-calendar-plus me-1"></i>Agendar</button>
+					<a th:href="@{/consultas}" class="btn btn-outline-secondary">Cancelar</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+</body>
+</html>

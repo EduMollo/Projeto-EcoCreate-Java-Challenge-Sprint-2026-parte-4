@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title th:text="${clinicaForm.id == null} ? 'Nova clínica — ClyvoVet' : 'Editar clínica — ClyvoVet'">Clínica — ClyvoVet</title>
+</head>
+<body>
+<section>
+	<h1 class="h3 mb-3" th:text="${clinicaForm.id == null} ? 'Nova clínica' : 'Editar clínica'">Clínica</h1>
+
+	<div class="card shadow-sm">
+		<div class="card-body">
+			<form th:object="${clinicaForm}"
+				th:action="${clinicaForm.id == null} ? @{/clinicas} : @{/clinicas/{id}(id=${clinicaForm.id})}" method="post">
+				<input type="hidden" th:field="*{id}">
+
+				<div class="row g-3">
+					<div class="col-md-8">
+						<label for="nome" class="form-label">Nome</label>
+						<input type="text" class="form-control" id="nome" th:field="*{nome}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{nome}"></div>
+					</div>
+					<div class="col-md-4">
+						<label for="cnpj" class="form-label">CNPJ (somente números)</label>
+						<input type="text" class="form-control" id="cnpj" th:field="*{cnpj}" th:errorclass="is-invalid" maxlength="14">
+						<div class="invalid-feedback" th:errors="*{cnpj}"></div>
+					</div>
+					<div class="col-md-6">
+						<label for="email" class="form-label">E-mail</label>
+						<input type="email" class="form-control" id="email" th:field="*{email}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{email}"></div>
+					</div>
+					<div class="col-md-6">
+						<label for="telefone" class="form-label">Telefone (somente números)</label>
+						<input type="text" class="form-control" id="telefone" th:field="*{telefone}" th:errorclass="is-invalid" maxlength="11">
+						<div class="invalid-feedback" th:errors="*{telefone}"></div>
+					</div>
+					<div class="col-md-8">
+						<label for="endereco" class="form-label">Endereço</label>
+						<input type="text" class="form-control" id="endereco" th:field="*{endereco}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{endereco}"></div>
+					</div>
+					<div class="col-md-3">
+						<label for="cidade" class="form-label">Cidade</label>
+						<input type="text" class="form-control" id="cidade" th:field="*{cidade}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{cidade}"></div>
+					</div>
+					<div class="col-md-1">
+						<label for="estado" class="form-label">UF</label>
+						<input type="text" class="form-control text-uppercase" id="estado" th:field="*{estado}" th:errorclass="is-invalid" maxlength="2">
+						<div class="invalid-feedback" th:errors="*{estado}"></div>
+					</div>
+				</div>
+
+				<div class="mt-4 d-flex gap-2">
+					<button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Salvar</button>
+					<a th:href="@{/clinicas}" class="btn btn-outline-secondary">Cancelar</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head>
+	<title th:text="${tutorForm.id == null} ? 'Novo tutor — ClyvoVet' : 'Editar tutor — ClyvoVet'">Tutor — ClyvoVet</title>
+</head>
+<body>
+<section>
+	<h1 class="h3 mb-3" th:text="${tutorForm.id == null} ? 'Novo tutor' : 'Editar tutor'">Tutor</h1>
+
+	<div class="card shadow-sm">
+		<div class="card-body">
+			<form th:object="${tutorForm}"
+				th:action="${tutorForm.id == null} ? @{/tutores} : @{/tutores/{id}(id=${tutorForm.id})}" method="post">
+				<input type="hidden" th:field="*{id}">
+
+				<div class="row g-3">
+					<div class="col-md-8">
+						<label for="nome" class="form-label">Nome completo</label>
+						<input type="text" class="form-control" id="nome" th:field="*{nome}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{nome}"></div>
+					</div>
+					<div class="col-md-4">
+						<label for="cpf" class="form-label">CPF (somente números)</label>
+						<input type="text" class="form-control" id="cpf" th:field="*{cpf}" th:errorclass="is-invalid" maxlength="11">
+						<div class="invalid-feedback" th:errors="*{cpf}"></div>
+					</div>
+					<div class="col-md-6">
+						<label for="email" class="form-label">E-mail</label>
+						<input type="email" class="form-control" id="email" th:field="*{email}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{email}"></div>
+					</div>
+					<div class="col-md-3">
+						<label for="telefone" class="form-label">Telefone (somente números)</label>
+						<input type="text" class="form-control" id="telefone" th:field="*{telefone}" th:errorclass="is-invalid" maxlength="11">
+						<div class="invalid-feedback" th:errors="*{telefone}"></div>
+					</div>
+					<div class="col-md-3">
+						<label for="dataNascimento" class="form-label">Data de nascimento</label>
+						<input type="date" class="form-control" id="dataNascimento" th:field="*{dataNascimento}" th:errorclass="is-invalid">
+						<div class="invalid-feedback" th:errors="*{dataNascimento}"></div>
+					</div>
+				</div>
+
+				<div class="mt-4 d-flex gap-2">
+					<button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Salvar</button>
+					<a th:href="@{/tutores}" class="btn btn-outline-secondary">Cancelar</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+</body>
+</html>
