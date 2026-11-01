@@ -42,3 +42,5 @@ node_modules/
 qa/test-results/
 qa/playwright-report/
 data/
+
+.vercel/

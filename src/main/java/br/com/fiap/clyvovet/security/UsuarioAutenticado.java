@@ -20,6 +20,8 @@ import lombok.Getter;
 @Getter
 public class UsuarioAutenticado implements UserDetails {
 
+	private static final long serialVersionUID = 1L;
+
 	private final Long id;
 	private final String username;
 	private final String senha;
