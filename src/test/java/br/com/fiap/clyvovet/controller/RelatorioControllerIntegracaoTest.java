@@ -13,6 +13,9 @@ class RelatorioControllerIntegracaoTest {
  @Test void tutorNaoAcessaExportacao() throws Exception {
   mvc.perform(get("/relatorios/atendimentos.json").with(user("tutor").authorities(()->"TUTOR"))).andExpect(redirectedUrl("/acesso-negado"));
  }
+ @Test void tutorNaoAcessaMonitoramentoDeSensores() throws Exception {
+  mvc.perform(get("/relatorios/oracle").with(user("tutor").authorities(()->"TUTOR"))).andExpect(redirectedUrl("/acesso-negado"));
+ }
  @Test void veterinarioNaoAcessaRelatorios() throws Exception {
   mvc.perform(get("/relatorios").with(user("vet").authorities(()->"VETERINARIO"))).andExpect(redirectedUrl("/acesso-negado"));
  }

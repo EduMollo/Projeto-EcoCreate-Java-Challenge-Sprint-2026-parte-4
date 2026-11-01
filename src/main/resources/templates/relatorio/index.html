@@ -13,5 +13,6 @@
 <div class="col-md-6"><div class="card card-body"><h2 class="h5">Faturamento anual</h2>
 <form th:action="@{/relatorios/faturamento}" method="get"><label for="ano" class="form-label">Ano</label>
 <input id="ano" name="ano" type="number" min="2000" max="2100" required th:value="${ano}" class="form-control mb-3"><button class="btn btn-primary">Consultar</button></form></div></div></div>
+<a th:if="${sensoresDisponiveis}" th:href="@{/relatorios/oracle}" class="btn btn-outline-primary mt-3">Monitoramento por sensores e auditoria</a>
 <pre th:if="${resultado}" th:text="${resultado}" class="relatorio card card-body mt-3"></pre>
 </section></body></html>

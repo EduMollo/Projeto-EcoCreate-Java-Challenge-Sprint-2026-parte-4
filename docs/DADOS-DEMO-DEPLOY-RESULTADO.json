@@ -1,0 +1,9 @@
+{
+  "destino": "https://clyvovet.vercel.app",
+  "projeto_supabase": "zznnuwevoeuxaznplxhy",
+  "schema": "clyvovet",
+  "verificado_em": "2026-11-01T17:11:49.793776500-03:00",
+  "criada": true,
+  "clinicas": 6, "tutores": 32, "pets": 60,
+  "consultas": 190, "vacinas": 120, "medicamentos": 50, "eventos": 310
+}

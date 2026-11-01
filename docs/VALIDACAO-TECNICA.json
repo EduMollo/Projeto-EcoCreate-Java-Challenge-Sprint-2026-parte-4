@@ -1,0 +1,135 @@
+{
+  "verificado_em": "2026-11-01T18:29:41.350785-03:00",
+  "ambiente": "Java 21; H2 isolado; Chromium Playwright 1.56.1",
+  "junit": {
+    "tests": 47,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 4,
+    "executados": 43,
+    "suites": [
+      {
+        "suite": "br.com.fiap.clyvovet.config.RecursosVercelIntegracaoTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "br.com.fiap.clyvovet.config.SegurancaIntegracaoTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "br.com.fiap.clyvovet.config.SessaoVercelConfigTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "br.com.fiap.clyvovet.controller.CadastroControllerIntegracaoTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "br.com.fiap.clyvovet.controller.OracleClinicoControllerIntegracaoTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "br.com.fiap.clyvovet.controller.RelatorioControllerIntegracaoTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "br.com.fiap.clyvovet.demo.CargaDemonstracaoIntegracaoTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "br.com.fiap.clyvovet.model.ConsultaTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "br.com.fiap.clyvovet.security.SessaoSerializacaoTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "br.com.fiap.clyvovet.service.ConsultaServiceIntegracaoTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "br.com.fiap.clyvovet.service.OracleClinicoServiceTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "br.com.fiap.clyvovet.service.OracleIntegracaoTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 2
+      },
+      {
+        "suite": "br.com.fiap.clyvovet.service.PostgresIntegracaoTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 2
+      },
+      {
+        "suite": "br.com.fiap.clyvovet.service.risco.AvaliadorDeRiscoTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "playwright": {
+    "testes": 6,
+    "aprovados": 6,
+    "falhas": 0,
+    "duracao_segundos": 12.795712,
+    "casos": [
+      "QA01 - tutor autenticado consulta seus pets",
+      "QA02 - senha incorreta impede autenticacao",
+      "QA03 - alterar ID nao permite acesso ao pet de outro tutor",
+      "QA04 - agendar, iniciar e concluir atendimento",
+      "QA05 - tema escuro persiste entre paginas e recarregamento",
+      "QA06 - tutor nao acessa relatorios administrativos"
+    ]
+  },
+  "jar": {
+    "arquivo": "clyvovet-web-4.0.0.jar",
+    "sha256": "83ba77570aeea210d921108d03b744d271d5b5eca554691cb1b1031db5543039"
+  },
+  "limites": [
+    "H2 e contratos de tela/JDBC nao comprovam execucao real de PL/SQL.",
+    "Os quatro testes opcionais de bancos externos nao foram ativados nesta suite.",
+    "Oracle FIAP e MongoDB reais foram validados em 01/11/2026; evidencia na entrega Database.",
+    "Video narrado e apresentacao da equipe permanecem a cargo dos integrantes."
+  ]
+}

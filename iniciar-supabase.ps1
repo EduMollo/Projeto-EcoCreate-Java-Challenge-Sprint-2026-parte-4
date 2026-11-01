@@ -9,7 +9,7 @@ Push-Location $PSScriptRoot
 try {
     $senhaBanco = Read-Host 'Senha do banco definida ao criar o projeto Supabase' -AsSecureString
     if ($senhaBanco.Length -eq 0) { throw 'A senha do banco nao pode estar vazia.' }
-    $senhaAdmin = Read-Host 'Escolha a senha do ADMIN do site (minimo 12 caracteres; diferente da senha do banco)' -AsSecureString
+    $senhaAdmin = Read-Host 'Senha inicial do ADMIN (minimo 12 caracteres; so usada se a conta ainda nao existe)' -AsSecureString
     if ($senhaAdmin.Length -lt 12) { throw 'A senha do ADMIN precisa de pelo menos 12 caracteres.' }
     $env:SPRING_PROFILES_ACTIVE = 'postgres'
     $env:DB_URL = 'jdbc:postgresql://aws-0-us-east-1.pooler.supabase.com:5432/postgres?sslmode=require'
@@ -26,6 +26,7 @@ try {
     }
     Write-Host 'Aguarde Started ClyvoVetWebApplication; depois abra http://localhost:8080. Ctrl+C encerra.'
     Write-Host 'No primeiro inicio o Flyway cria as tabelas e o login admin e cadastrado.'
+    Write-Host 'Se admin ja existe, a senha digitada acima NAO altera a senha salva. Para conferir: .\verificar-login.ps1'
     & "$PSScriptRoot/mvnw.cmd" "-Dmaven.repo.local=$cacheDependencias" spring-boot:run
     $resultado = $LASTEXITCODE
 }

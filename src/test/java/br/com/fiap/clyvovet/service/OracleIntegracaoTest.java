@@ -12,7 +12,7 @@ class OracleIntegracaoTest {
  @Autowired RelatorioOracleService relatorios;
  @Autowired JdbcTemplate jdbc;
  @Test void objetosCompiladosEProceduresExecutaveis() {
-  assertThat(jdbc.queryForObject("select count(*) from user_errors where name in ('PKG_CLYVOVET','TRG_AUD_PET')",Integer.class)).isZero();
+  assertThat(jdbc.queryForObject("select count(*) from user_errors where name like 'PKG_CLYVO%' or name in ('TRG_CV4_AUD_PET','TRG_CV4_CONSULTA_CAT')",Integer.class)).isZero();
   assertThat(relatorios.exportar(null)).startsWith("[").endsWith("]");
   assertThat(relatorios.faturamento(2026)).contains("Total:");
  }

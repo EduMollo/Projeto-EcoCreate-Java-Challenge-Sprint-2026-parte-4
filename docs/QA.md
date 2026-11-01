@@ -1,27 +1,55 @@
 # QA — automação de navegador
 
-## Pré-condições
-Aplicação executando com perfil padrão H2 e carga inicial; Node.js e Chromium do Playwright instalados. Não rodar contra dados reais. Cada teste tem um novo contexto de navegador; execução com um worker. O teste de atendimento cria registro próprio pela tela e não depende de uma consulta preexistente.
+## Resultado em 01/11/2026
 
-## Casos
-| ID | Ação | Resultado esperado |
-|---|---|---|
-| QA01 | Login tutor e consulta de pets | Thor/Luna visíveis; Rex ausente |
-| QA02 | Login com senha incorreta | Falha exibida e rota autenticada continua protegida |
-| QA03 | Tutor acessa /pets/3/dashboard | Acesso negado sem score do outro pet |
-| QA04 | Veterinário agenda/inicia/conclui nova consulta | Diagnóstico salvo e ação iniciar indisponível |
-| QA05 | Alternância de tema, navegação e reload | Preferência mantida; volta ao claro |
-| QA06 | Tutor acessa relatórios | Acesso negado |
+**6 cenários aprovados, 0 falhas**, Chromium, Playwright 1.56.1, um worker, H2 isolado.
+A execução durou 12,8 segundos. Não foram usados dados de produção.
 
-## Execução e evidências
-1. Executar npm install e npx playwright install chromium na pasta qa; versionar o lockfile gerado.
-2. Com H2 iniciado, executar npm run headed. BASE_URL pode mudar o endereço; manter uma base de testes com a carga correspondente.
-3. Mostrar playwright.config.js, cenários e terminal na gravação narrada. Abrir npm run report para resultados. O HTML, XML JUnit, vídeos e traces ficam em qa/playwright-report e qa/test-results, ignorados no Git por poderem conter dados de tela.
-4. Vincular casos, resultados e falhas reais aos itens de teste manuais no Azure Boards. A imagem recebida contém somente a Parte B; os requisitos completos da Parte A não foram fornecidos. Os seis casos não substituem automaticamente essa parte.
-5. Disponibilizar os fontes na branch develop pública e garantir o acesso do professor à organização/projeto de QA. Não foi criado projeto externo nem enviado convite nesta execução.
+| Caso | Verificação executada |
+|---|---|
+| QA01 | Tutor autenticado vê Thor/Luna e não vê Rex |
+| QA02 | Senha incorreta impede acesso autenticado |
+| QA03 | Trocar o ID não permite acessar o pet de outro tutor |
+| QA04 | Veterinário agenda, inicia e conclui atendimento, com diagnóstico salvo |
+| QA05 | Tema persiste entre páginas e recarregamento |
+| QA06 | Tutor não acessa relatórios administrativos |
 
-## Verificação adicional do tema
-node --test qa/tema.test.cjs executa sem dependências externas. Quatro casos aprovados. Esse teste não substitui a inspeção visual nem os cenários de navegador.
+Evidência versionada: [evidencias/playwright-junit.xml](evidencias/playwright-junit.xml).
+Resumo consolidado: [VALIDACAO-TECNICA.json](VALIDACAO-TECNICA.json).
+Os quatro testes Node do tema também passaram.
 
-## Situação
-Os testes Playwright foram escritos e tiveram sintaxe verificada, mas não foram executados: a execução específica de navegador ainda está pendente. O build Maven completo e seus 28 testes padrão foram posteriormente aprovados. Não existem vídeos ou capturas apresentados como resultados de execução.
+## Reproduzir
+
+Requer JDK 17+, Node.js e H2 com a carga inicial. Primeiro compilar o Java e iniciar a aplicação.
+Em outro terminal:
+
+~~~powershell
+cd qa
+npm ci
+npx playwright install chromium
+npm test
+npm run report
+~~~
+
+BASE_URL permite mudar a porta, por exemplo:
+`$env:BASE_URL='http://127.0.0.1:18080'`.
+
+O cenário QA04 cria sua própria consulta. Reiniciar H2 restaura os dados.
+Não executar esta suíte contra Oracle, PostgreSQL ou o site de produção.
+
+O lockfile fixa as dependências. Os relatórios HTML, traces e vídeos automáticos ficam
+em qa/playwright-report e qa/test-results, fora do Git. Os vídeos automáticos não têm
+narração e não substituem a apresentação exigida pela faculdade.
+
+## Escopo das evidências
+
+A suíte valida interface e backend com H2. A tela Oracle tem quatro testes MVC adicionais
+de renderização, validação, redirecionamento e score com serviço substituído por contrato.
+Esses testes não são apresentados como execução real de PL/SQL.
+
+A execução real Oracle/MongoDB está registrada na entrega Database. Durante a gravação,
+usar o perfil Oracle para mostrar procedures no banco real.
+
+Azure Boards, acesso do professor e eventuais requisitos específicos da disciplina QA
+são externos a esta entrega Java/Database. Não há organização ou convite fictício informado
+como concluído. Os registros iniciais estão preservados em historico/QA-INICIAL.md.

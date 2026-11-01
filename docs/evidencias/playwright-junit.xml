@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites id="" name="" tests="6" failures="0" skipped="0" errors="0" time="12.795712">
+<testsuite name="fluxos.spec.js" timestamp="2026-11-01T21:24:43.697Z" tests="6" failures="0" skipped="0" time="10.343" errors="0">
+<testcase name="QA01 - tutor autenticado consulta seus pets" classname="fluxos.spec.js" time="5.569">
+</testcase>
+<testcase name="QA02 - senha incorreta impede autenticacao" classname="fluxos.spec.js" time="0.73">
+</testcase>
+<testcase name="QA03 - alterar ID nao permite acesso ao pet de outro tutor" classname="fluxos.spec.js" time="0.712">
+</testcase>
+<testcase name="QA04 - agendar, iniciar e concluir atendimento" classname="fluxos.spec.js" time="1.806">
+</testcase>
+<testcase name="QA05 - tema escuro persiste entre paginas e recarregamento" classname="fluxos.spec.js" time="0.88">
+</testcase>
+<testcase name="QA06 - tutor nao acessa relatorios administrativos" classname="fluxos.spec.js" time="0.646">
+</testcase>
+</testsuite>
+</testsuites>

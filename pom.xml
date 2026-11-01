@@ -13,7 +13,7 @@
 	<artifactId>clyvovet-web</artifactId>
 	<version>4.0.0</version>
 	<name>ClyvoVet Web</name>
-	<description>Jornada contínua de saúde do pet — aplicação web (Java Advanced, 3ª Sprint)</description>
+	<description>Jornada contínua de saúde do pet - aplicação web (Java Advanced, Sprint 4)</description>
 
 	<properties>
 		<java.version>17</java.version>

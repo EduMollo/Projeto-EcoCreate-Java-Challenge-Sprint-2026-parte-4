@@ -12,7 +12,7 @@ import br.com.fiap.clyvovet.service.RelatorioBancoService;
 public class RelatorioController {
  private final ObjectProvider<RelatorioBancoService> relatorios;
  public RelatorioController(ObjectProvider<RelatorioBancoService> relatorios) { this.relatorios=relatorios; }
- @GetMapping public String pagina(Model model) { model.addAttribute("relatoriosDisponiveis",relatorios.getIfAvailable()!=null); model.addAttribute("ano",LocalDate.now().getYear()); return "relatorio/index"; }
+ @GetMapping public String pagina(Model model) { model.addAttribute("relatoriosDisponiveis",relatorios.getIfAvailable()!=null); model.addAttribute("sensoresDisponiveis",relatorios.getIfAvailable() instanceof br.com.fiap.clyvovet.service.RelatorioOracleService); model.addAttribute("ano",LocalDate.now().getYear()); return "relatorio/index"; }
  @GetMapping("/atendimentos.json") public ResponseEntity<String> exportar(@RequestParam(required=false) Long clinica) {
   if(clinica!=null && clinica<=0) return ResponseEntity.badRequest().body("Clinica invalida");
   var servico=relatorios.getIfAvailable(); if(servico==null) return ResponseEntity.status(503).body("Relatorio indisponivel neste ambiente");

@@ -1,35 +1,48 @@
-# Registro de validação
+# Validação vigente — 01/11/2026
 
-## Executado
-- Tema: 4 testes Node aprovados (preferência, fallback do sistema, alternância e armazenamento bloqueado).
-- Domínio: 9 testes existentes de ConsultaTest/AvaliadorDeRiscoTest aprovados usando JDK 21, javac e launcher JUnit com dependências em cache. Não foi necessário mudar a stack do projeto.
-- Novas classes RelatorioOracleService, RelatorioController e AdministradorOracleConfig: compilação isolada aprovada com bibliotecas locais.
-- Sintaxe JS: tema, configuração Playwright, cenários QA e script MongoDB aprovada.
-- git status das duas entregas originais: sem alterações.
+| Parte | Resultado |
+|---|---|
+| Maven/JUnit | 47 testes identificados; 43 executados com sucesso; zero falhas/erros; 4 opcionais de bancos externos ignorados |
+| Empacotamento | clean verify com BUILD SUCCESS; JAR executável clyvovet-web-4.0.0.jar gerado com o POM real |
+| Tela Oracle | 4 testes MVC aprovados: formulário/auditoria, leitura válida, limites e score; contrato substitui o serviço de banco |
+| Contrato JDBC Oracle | 3 testes aprovados: parâmetros, retorno e propagação de falha |
+| Playwright | 6 cenários aprovados em Chromium e H2; duração 12,8 segundos |
+| Tema | 4 testes Node aprovados |
+| Vercel | Publicação Java com PostgreSQL, HTTPS e sessões compartilhadas |
+| Dados demonstrativos | 60 pets, 190 consultas, 120 vacinas, 50 medicamentos e 310 eventos no deploy, conforme registro da carga |
 
-## Bloqueios reais
-- Maven Wrapper tentou gravar fora do workspace; verificar.ps1 configura cache temporário gravável.
-- Maven com cache temporário falhou por DNS indisponível para repo.maven.apache.org. O cache antigo só possui Boot 3.2.x, incompatível com a base Boot 4.1.0. A compilação integral contra esse cache antigo não constitui uma validação da stack e não foi considerada aprovada.
-- Docker CLI encontrado; daemon desligado.
-- Oracle externo não fornecido/conectado. A compilação de package e trigger no Oracle, leitura real de CLOB, Flyway Oracle, persistência e auditoria ainda precisam ser verificados.
-- Playwright não foi executado nem a UI inspecionada em navegador, pois o build completo não iniciou.
+O resumo e o hash do JAR estão em [VALIDACAO-TECNICA.json](VALIDACAO-TECNICA.json).
+A evidência Playwright sanitizada está em [evidencias/playwright-junit.xml](evidencias/playwright-junit.xml).
+Os relatórios completos locais ficam nas pastas de teste ignoradas pelo Git.
 
-## Próximas verificações
-1. Em ambiente com acesso ao Maven Central, executar verificar.ps1 ou mvnw.cmd clean verify.
-2. Rodar os seis cenários QA contra H2 e inspecionar contraste e navegação desktop/mobile.
-3. Conectar schema Oracle 19c+ novo; iniciar perfil oracle e executar os testes optativos e sql/verificar-oracle.sql.
-4. Demonstrar as chamadas às duas procedures pela interface com SELECT de evidência.
-5. Revisar e atualizar a modelagem Database para o schema integrado antes de entregar a disciplina.
-6. Criar o repositório remoto e publicar a aplicação na hospedagem definida. Não há deploy ou dataset exportado real nesta execução.
+## Oracle FIAP e MongoDB reais
 
-## Adaptação PostgreSQL/Supabase
-- Interface RelatorioBancoService, adaptadores Oracle/PostgreSQL, controller e AdministradorBancoConfig compilaram isoladamente com o cache local.
-- Os quatro testes do tema foram repetidos e passaram.
-- Nenhuma migration foi aplicada a projeto Supabase. Os projetos encontrados estavam inativos e não foram modificados. O teste real PostgresIntegracaoTest e o script sql/verificar-postgres.sql foram preparados para a validação após a conexão.
-- Corrigida a sintaxe Oracle ADD COLUMN para ADD na migration de cancelamento, ainda não aplicada.
+O roteiro concluído pelo usuário em 01/11/2026 às 16:19 registrou Oracle 19.3,
+12 objetos finais VALID e USER_ERRORS vazio, testes transacionais com rollback,
+JSON real de 34 atendimentos e importação/reimportação MongoDB sem duplicatas.
+Os dois testes OracleIntegracaoTest executaram exportação e faturamento pelo serviço Java.
 
-## Correcao da migration 5 apos primeira conexao real
-O log fornecido pelo usuario confirmou conexao PostgreSQL 17.11, aplicacao de V1-V4 e rollback completo de V5. O erro ocorreu ao habilitar RLS em flyway_schema_history, tabela interna utilizada pelo Flyway durante a migration. V5 foi corrigida para alterar apenas as onze tabelas de negocio/auditoria, incluindo as revogacoes de privilegios. Nao se alterou nenhuma migration ja aplicada com sucesso nesse projeto. Revisao estatica confirmou a exclusao do historico de todos os comandos SQL. A nova execucao SQL depende de reiniciar pelo iniciar-supabase.ps1 no computador do usuario. A tentativa local de testes Maven offline permaneceu bloqueada pela ausencia de Boot 4.1.0 no cache disponivel para o agente.
+Essa evidência permanece em Database/docs/2TDSPF_2026_Validacao.json.
+A suíte mais recente, com 47 testes, não ativou os quatro opcionais externos e não
+substitui nem altera a evidência da execução anterior.
 
-## Atualização após clean verify do usuário
-O build completo terminou com BUILD SUCCESS e gerou o JAR executável. Relatórios Surefire conferidos: 32 testes encontrados; 28 passaram; nenhum erro/falha; quatro ignorados (dois Oracle, dois PostgreSQL). Esta execução supera o bloqueio de build registrado anteriormente. A conexão real e a interface com Supabase foram confirmadas pelo usuário, mas os testes automatizados opcionais de banco externo e a suíte Playwright ainda não foram executados.
+Uma nova conexão Oracle pelo ambiente do agente foi bloqueada pela permissão de rede.
+Isso não foi apresentado como falha do banco nem como nova execução bem-sucedida.
+O fluxo Oracle por telas deverá ser mostrado na gravação, com o acesso local já configurado.
+
+## Publicação e limites
+
+O usuário confirmou login na aplicação publicada e executou a carga demonstrativa.
+Os testes de navegador acima usam H2, não comprovam toda a jornada PostgreSQL.
+A página de login, recursos estáticos e logs do deploy foram inspecionados; os ajustes
+de desempenho observaram inicialização de 10–15 segundos, antes 19–20 segundos.
+O primeiro acesso após inatividade ainda pode aguardar a inicialização do container.
+
+O novo fechamento inclui no GitHub os fontes Oracle antes restritos à pasta local.
+Os registros iniciais de impedimentos foram preservados em historico/VALIDACAO-INICIAL.md.
+
+## Apresentação a concluir pela equipe
+
+Gravar o vídeo Java de até 15 minutos com participação dos integrantes, e o vídeo narrado
+de Database mostrando o backend Oracle e o MongoDB. Preencher docs/VIDEO.md e o arquivo
+correspondente da entrega Database. Conferir acesso aos links antes de submeter.

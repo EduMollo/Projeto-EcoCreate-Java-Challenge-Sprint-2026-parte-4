@@ -43,7 +43,11 @@
 					</div>
 					<div class="col-md-6">
 						<label for="veterinario" class="form-label">Veterinário responsável</label>
-						<input type="text" class="form-control" id="veterinario" th:field="*{veterinario}" th:errorclass="is-invalid">
+						<input th:if="${veterinariosOracle == null}" type="text" class="form-control" id="veterinario" th:field="*{veterinario}" th:errorclass="is-invalid">
+						<select th:if="${veterinariosOracle != null}" class="form-select" id="veterinario" th:field="*{veterinario}" th:errorclass="is-invalid">
+							<option value="">Selecione.</option>
+							<option th:each="nome : ${veterinariosOracle}" th:value="${nome}" th:text="${nome}"></option>
+						</select>
 						<div class="invalid-feedback" th:errors="*{veterinario}"></div>
 					</div>
 					<div class="col-12">

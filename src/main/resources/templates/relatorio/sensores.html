@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragmentos/layout :: layout(~{::title}, ~{::section})}">
+<head><title>Monitoramento e auditoria - ClyvoVet</title></head>
+<body><section>
+  <a th:href="@{/relatorios}" class="btn btn-outline-secondary mb-3">Voltar aos relatórios</a>
+  <h1 class="h3">Monitoramento por sensores</h1>
+  <p class="text-secondary">Registre uma leitura e consulte o score de risco do pet. O score usa o histórico de leituras de cães e gatos.</p>
+  <div th:if="${erro}" class="alert alert-warning" role="alert" th:text="${erro}"></div>
+  <div class="row g-3">
+    <div class="col-lg-7"><div class="card card-body">
+      <h2 class="h5">Registrar leitura</h2>
+      <form th:action="@{/relatorios/oracle/leituras}" method="post" th:object="${leituraSensorForm}">
+        <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger" role="alert">Confira os campos e os limites informados.</div>
+        <label for="petId" class="form-label">Pet</label>
+        <select id="petId" th:field="*{petId}" required class="form-select mb-3">
+          <option value="">Selecione</option><option th:each="pet : ${petsSensores}" th:value="${pet.id}" th:text="${pet.nome}"></option>
+        </select>
+        <label for="dispositivo" class="form-label">Dispositivo</label>
+        <input id="dispositivo" th:field="*{dispositivo}" maxlength="30" required class="form-control mb-3" placeholder="ESP32-DEMO">
+        <div class="row g-3">
+          <div class="col-sm-6"><label for="temperatura" class="form-label">Temperatura (°C)</label>
+            <input id="temperatura" th:field="*{temperatura}" type="number" min="20" max="50" step="0.1" required class="form-control"></div>
+          <div class="col-sm-6"><label for="frequenciaCardiaca" class="form-label">Frequência cardíaca (bpm)</label>
+            <input id="frequenciaCardiaca" th:field="*{frequenciaCardiaca}" type="number" min="1" max="400" required class="form-control"></div>
+          <div class="col-sm-6"><label for="spo2" class="form-label">SpO₂ (%)</label>
+            <input id="spo2" th:field="*{spo2}" type="number" min="0" max="100" step="0.1" required class="form-control"></div>
+          <div class="col-sm-6"><label for="atividade" class="form-label">Atividade (0 a 100)</label>
+            <input id="atividade" th:field="*{atividade}" type="number" min="0" max="100" step="0.1" required class="form-control"></div>
+        </div>
+        <button class="btn btn-primary mt-3">Salvar leitura</button>
+      </form>
+    </div></div>
+    <div class="col-lg-5"><div class="card card-body">
+      <h2 class="h5">Consultar risco</h2>
+      <form th:action="@{/relatorios/oracle/risco}" method="get">
+        <label for="petRisco" class="form-label">Pet</label>
+        <select name="petId" id="petRisco" required class="form-select mb-3">
+          <option th:each="pet : ${petsSensores}" th:value="${pet.id}" th:text="${pet.nome}" th:selected="${pet.id == petSelecionado}"></option>
+        </select><button class="btn btn-primary">Calcular score</button>
+      </form>
+      <p th:if="${scoreSensor != null}" class="display-6 mt-3"><span th:text="${scoreSensor}"></span><small class="fs-6 text-secondary"> / 100</small></p>
+      <p class="small text-secondary mt-3 mb-0">Faixas: baixo &lt; 25; moderado &lt; 50; alto &lt; 75; crítico a partir de 75. Este cálculo complementa o painel de saúde por regras.</p>
+    </div></div>
+  </div>
+  <h2 class="h5 mt-4">Últimas alterações de pets</h2>
+  <div class="table-responsive"><table class="table table-striped">
+    <thead><tr><th scope="col">Registro</th><th scope="col">Pet</th><th scope="col">Operação</th><th scope="col">Usuário do banco</th><th scope="col">Data</th></tr></thead>
+    <tbody><tr th:each="a : ${auditorias}"><td th:text="${a.id_auditoria}"></td><td th:text="${a.id_registro}"></td><td th:text="${a.tipo_operacao}"></td><td th:text="${a.nome_usuario}"></td><td th:text="${a.data_hora}"></td></tr></tbody>
+  </table></div>
+</section></body></html>
