@@ -10,4 +10,4 @@ ENV SPRING_PROFILES_ACTIVE=postgres
 ENV PORT=8080
 USER 10001
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-XX:TieredStopAtLevel=1", "-jar", "/app/app.jar"]
