@@ -21,7 +21,7 @@ public class SecurityConfig {
 
 	private static final String[] ROTAS_PUBLICAS = { "/login", "/cadastro", "/css/**", "/js/**", "/img/**", "/h2-console/**" };
 	private static final String[] ROTAS_LEITURA_PET = { "/pets/{id:\\d+}", "/pets/{id:\\d+}/dashboard",
-			"/pets/{id:\\d+}/historico" };
+			"/pets/{id:\\d+}/historico", "/pets/{id:\\d+}/copilot" };
 
 	@Bean
 	public SecurityFilterChain filtrar(HttpSecurity http) throws Exception {
@@ -31,6 +31,7 @@ public class SecurityConfig {
 				.requestMatchers("/usuarios/**", "/clinicas/**", "/relatorios/**").hasAuthority(ADMIN.name())
 				.requestMatchers("/meus-pets/**").hasAuthority(TUTOR.name())
 				.requestMatchers(HttpMethod.GET, ROTAS_LEITURA_PET).authenticated()
+				.requestMatchers(HttpMethod.POST, "/pets/{petId:\\d+}/copilot/{id}/ler").hasAuthority(TUTOR.name())
 				.requestMatchers("/pets/**", "/tutores/**", "/consultas/**")
 						.hasAnyAuthority(ADMIN.name(), VETERINARIO.name())
 				.anyRequest().authenticated())
