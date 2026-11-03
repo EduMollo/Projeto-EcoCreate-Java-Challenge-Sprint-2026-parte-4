@@ -7,12 +7,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.UUID;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
@@ -21,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
  */
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class SegurancaIntegracaoTest {
 
 	@Autowired
@@ -29,9 +34,15 @@ class SegurancaIntegracaoTest {
 	@Autowired
 	private Flyway flyway;
 
+	@Autowired
+	private JdbcTemplate jdbc;
+
+	@Autowired
+	private PasswordEncoder encoder;
+
 	@Test
 	void flywayAplicaTodasAsMigrations() {
-		assertThat(flyway.info().applied()).hasSize(6);
+		assertThat(flyway.info().applied()).hasSize(7);
 		assertThat(flyway.info().pending()).isEmpty();
 	}
 
@@ -44,7 +55,7 @@ class SegurancaIntegracaoTest {
 
 	@Test
 	void adminAcessaGestaoDeUsuarios() throws Exception {
-		MockHttpSession sessao = autenticar("admin", "admin123");
+		MockHttpSession sessao = autenticar("admin");
 
 		mockMvc.perform(get("/usuarios").session(sessao)).andExpect(status().isOk());
 		mockMvc.perform(get("/clinicas").session(sessao)).andExpect(status().isOk());
@@ -52,7 +63,7 @@ class SegurancaIntegracaoTest {
 
 	@Test
 	void veterinarioNaoAcessaRotasExclusivasDoAdmin() throws Exception {
-		MockHttpSession sessao = autenticar("vet", "vet123");
+		MockHttpSession sessao = autenticar("vet");
 
 		mockMvc.perform(get("/consultas").session(sessao)).andExpect(status().isOk());
 		mockMvc.perform(get("/usuarios").session(sessao))
@@ -62,7 +73,7 @@ class SegurancaIntegracaoTest {
 
 	@Test
 	void tutorSoEnxergaOsPropriosPets() throws Exception {
-		MockHttpSession sessao = autenticar("tutor", "tutor123");
+		MockHttpSession sessao = autenticar("tutor");
 
 		mockMvc.perform(get("/meus-pets").session(sessao)).andExpect(status().isOk());
 		mockMvc.perform(get("/pets/1/dashboard").session(sessao)).andExpect(status().isOk());
@@ -75,7 +86,10 @@ class SegurancaIntegracaoTest {
 				.andExpect(redirectedUrl("/acesso-negado"));
 	}
 
-	private MockHttpSession autenticar(String usuario, String senha) throws Exception {
+	private MockHttpSession autenticar(String usuario) throws Exception {
+		String senha = UUID.randomUUID().toString();
+		assertThat(jdbc.update("update tb_usuario set senha = ? where username = ?",
+				encoder.encode(senha), usuario)).isEqualTo(1);
 		return (MockHttpSession) mockMvc.perform(formLogin("/login").user(usuario).password(senha))
 				.andExpect(authenticated())
 				.andReturn()
