@@ -5,7 +5,9 @@
 [**Video**](https://youtu.be/RujXMfOUj8U)
 
 **Acesso a Plataforma**
+
 **Login:** professor
+
 **Senha:** 123456
 
 ## Aplicação e arquitetura
