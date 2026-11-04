@@ -1,10 +1,8 @@
 # ClyvoVet — Java Advanced, Sprint 4
 
-Continuação da Sprint 3 aprovada com 100/100. Entrega em **04/11/2026**, turma **2TDSPF**.
-
 **Aplicação:** https://clyvovet.vercel.app
 **Fontes:** https://github.com/EduMollo/Projeto-EcoCreate-Java-Challenge-Sprint-2026-parte-4
-**Vídeo:** inserir o link em [docs/VIDEO.md](docs/VIDEO.md) após a gravação.
+[**Video**]()
 
 ## Aplicação e arquitetura
 
@@ -77,24 +75,6 @@ Usar somente H2 com a carga inicial. O cenário de atendimento cria uma consulta
 O lockfile fixa as versões. Instruções e resultados em [QA.md](docs/QA.md) e
 [VALIDACAO-SPRINT4.md](docs/VALIDACAO-SPRINT4.md).
 
-## Deploy e entrega
-
-A branch `main` publica na Vercel; `develop` contém os mesmos fontes de entrega.
-Produção: `SPRING_PROFILES_ACTIVE=postgres,vercel`, `PORT=8080`, `COOKIE_SECURE=true`,
-além de DB_URL, DB_USERNAME e DB_PASSWORD protegidas. O administrador existente é preservado.
-Guias: [DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md), [SUPABASE.md](docs/SUPABASE.md).
-
-O container tem ajustes de inicialização, sessão PostgreSQL com upsert e cache de recursos com hash.
-A plataforma ainda pode encerrar instâncias ociosas. Resultados em [DESEMPENHO-VERCEL.md](docs/DESEMPENHO-VERCEL.md).
-
-[Decisões](docs/DECISOES-SPRINT4.md) • [Roteiro Java, até 15 minutos](docs/ROTEIRO-SPRINT4.md) •
-[Vídeo a preencher](docs/VIDEO.md). Todos os integrantes devem participar da apresentação.
-A demonstração Oracle e a importação MongoDB têm roteiro próprio na entrega Database.
-
-A pasta `docs/historico` preserva registros anteriores. Os diagramas draw.io e a decisão de IA
-da Sprint 3 são históricos; não representam uma nova integração de IA executada nesta sprint.
-A modelagem Oracle atual está nos PDFs e SQL da entrega Database.
-
 ## Equipe — 2TDSPF
 
 | Integrante | RM |
@@ -105,5 +85,3 @@ A modelagem Oracle atual está nos PDFs e SQL da entrega Database.
 | Carlos Alberto Guedes Neto | 566022 |
 | Vinicius Luis Exposito Morassi | 563340 |
 
-O desenvolvimento recebeu assistência de IA. A equipe deve revisar, compreender e explicar o código.
-A autoria dos commits usa o perfil EduMollo; a participação real de cada integrante é apresentada pela equipe.
