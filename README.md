@@ -4,6 +4,10 @@
 **Fontes:** [**Github**](https://github.com/EduMollo/Projeto-EcoCreate-Java-Challenge-Sprint-2026-parte-4)
 [**Video**](https://youtu.be/RujXMfOUj8U)
 
+**Acesso a Plataforma**
+**Login:** professor
+**Senha:** 123456
+
 ## Aplicação e arquitetura
 
 Java 17+, Spring Boot 4.1.0, MVC, Thymeleaf, Bootstrap, Spring Security, JPA e Flyway.
